@@ -8,7 +8,10 @@
 import SwiftUI
 
 struct HomeView: View {
-    @StateObject var homeData: HomeViewModel = HomeViewModel()
+    @StateObject var homeViewModel: HomeViewModel = HomeViewModel()
+    @State private var hotSales: [HomeStore] = [HomeStore]()
+    @State private var bestSeller: [BestSeller] = [BestSeller]()
+    @State private var index = 0
     var body: some View {
         VStack(spacing: 0) {
             HStack {
@@ -42,7 +45,8 @@ struct HomeView: View {
                 
                 
             }
-            .padding(.horizontal)
+            .padding(.vertical)
+            .padding(.horizontal, 25)
             .background(Color.white)
             
             ScrollView(.vertical, showsIndicators: true) {
@@ -50,7 +54,6 @@ struct HomeView: View {
                     HStack {
                         Text("Select Category")
                             .font(.custom(customMarkProFontRegular, size: 25).bold())
-                            .padding(.horizontal)
                         Spacer()
                         Button {
                             
@@ -59,10 +62,9 @@ struct HomeView: View {
                                 .font(.custom(customMarkProFontRegular, size: 15))
                                 .foregroundColor(Color.customOrange)
                         }
-                        .padding(.horizontal)
-
                     }
                     .padding(.vertical)
+                    .padding(.horizontal, 25)
                     
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack(spacing: 23) {
@@ -73,9 +75,94 @@ struct HomeView: View {
                                     }
                             }
                         }
-                        .padding()
+                        .padding(.vertical)
+                        .padding(.horizontal, 25)
                     }
+                    HStack {
+                        HStack(spacing: 20) {
+                            Button {
+                                
+                            } label: {
+                                Image(systemName: "magnifyingglass")
+                                    .font(.title2)
+                                    .foregroundColor(Color.customOrange)
+                            }
+                            TextField("Search", text: .constant(""))
+                        }
+                        .padding(.vertical, 10)
+                        .padding(.horizontal)
+                        .background(
+                            Capsule()
+                                .fill(.white)
+                                .shadow(color: .black.opacity(0.1), radius: 7)
+                                .frame(maxWidth: .infinity)
+                        )
+                        
+                        ZStack {
+                            Button {
+                                
+                            } label: {
+                                ZStack {
+                                    Circle()
+                                        .fill(Color.customOrange)
+                                    Image("qrCode")
+                                        .resizable()
+                                        .renderingMode(.template)
+                                        .aspectRatio(contentMode: .fit)
+                                        .frame(height: 20)
+                                        .foregroundColor(Color.white)
+                                }
+                            }
+                        }
+                        .frame(maxWidth: 50)
+                        
+                    }
+                    .padding(.vertical)
+                    .padding(.horizontal, 25)
                     
+                    HStack {
+                        Text("Hot sales")
+                            .font(.custom(customMarkProFontRegular, size: 25).bold())
+                        Spacer()
+                        Button {
+                            
+                        } label: {
+                            Text("see more")
+                                .font(.custom(customMarkProFontRegular, size: 15))
+                                .foregroundColor(Color.customOrange)
+                        }
+                    }
+                    .padding(.top, 10)
+                    .padding(.horizontal, 25)
+                    
+                    VStack {
+                        TabView(selection: $index) {
+                            ForEach(hotSales, id: \.self) { item in
+                                hotSalesView(hotSalesData: item)
+                            }
+                        }
+                        .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
+                        .shadow(color: Color.black.opacity(0.14), radius: 10)
+                        .task {
+                            await loadData()
+                        }
+                    }
+                    .frame(height: 200)
+                    
+                    HStack {
+                        Text("Best seller")
+                            .font(.custom(customMarkProFontRegular, size: 25).bold())
+                        Spacer()
+                        Button {
+                            
+                        } label: {
+                            Text("see more")
+                                .font(.custom(customMarkProFontRegular, size: 15))
+                                .foregroundColor(Color.customOrange)
+                        }
+                    }
+                    .padding(.top, 10)
+                    .padding(.horizontal, 25)
                 }
             }
         }
@@ -96,7 +183,7 @@ extension HomeView {
         VStack {
             ZStack {
                 Circle()
-                    .fill(homeData.productType == type ? Color.customOrange : Color.white)
+                    .fill(homeViewModel.productType == type ? Color.customOrange : Color.white)
                     .frame(width: 71, height: 71)
                     .shadow(color: .black.opacity(0.1), radius: 10)
                 
@@ -105,19 +192,131 @@ extension HomeView {
                     .renderingMode(.template)
                     .aspectRatio(contentMode: .fit)
                     .frame(height: 30)
-                    .foregroundColor(homeData.productType == type ? Color.white : Color.black.opacity(0.3))
+                    .foregroundColor(homeViewModel.productType == type ? Color.white : Color.black.opacity(0.3))
             }
             
             Text(type.title)
                 .font(.custom(customMarkProFontRegular, size: 14))
-                .foregroundColor(homeData.productType == type ? Color.customOrange : Color.black)
+                .foregroundColor(homeViewModel.productType == type ? Color.customOrange : Color.black)
         }
         .background(Color.white)
     }
     
     private func switchProuductType(type: ProductType) {
         withAnimation {
-            homeData.productType = type
+            homeViewModel.productType = type
         }
     }
+}
+
+struct CardView: View{
+    var body: some View{
+        RoundedRectangle(cornerRadius: 12)
+            .fill(Color.pink)
+            .frame(height: 182)
+            .padding()
+            .padding(.horizontal, 6)
+    }
+}
+
+extension HomeView {
+    @ViewBuilder
+    private func hotSalesView(hotSalesData: HomeStore) -> some View {
+        HStack {
+            VStack(alignment: .leading) {
+                
+                if let new = hotSalesData.isNew {
+                    Text("New")
+                        .font(.custom(customMarkProFontRegular, size: 10).bold())
+                        .foregroundColor(Color.white)
+                        .padding(8)
+                        .background(
+                            Circle()
+                                .fill(Color.customOrange)
+                        )
+                    
+                }
+                VStack(alignment: .leading) {
+                    Text(hotSalesData.title)
+                        .font(.custom(customMarkProFontRegular, size: 25).bold())
+                    Text(hotSalesData.subtitle)
+                        .font(.custom(customMarkProFontRegular, size: 11))
+                }
+                Spacer()
+                Text("Buy now!")
+                    .font(.custom(customMarkProFontRegular, size: 11).bold())
+                    .padding(.vertical, 7)
+                    .padding(.horizontal, 30)
+                    .background(
+                        RoundedRectangle(cornerRadius: 9)
+                            .fill(Color.white)
+                    )
+            }
+            Spacer()
+        }
+        .frame(maxWidth: .infinity)
+        .padding()
+        .padding(.horizontal, 6)
+        .background(
+            RoundedRectangle(cornerRadius: 12)
+                .fill(Color.pink)
+                .frame(height: 182)
+        )
+        .padding()
+        
+        
+        
+    }
+}
+
+
+
+// MARK: - Network Stuff
+extension HomeView {
+    func loadData() async {
+        guard let url = URL(string: "https://run.mocky.io/v3/654bd15e-b121-49ba-a588-960956b15175")
+        else {
+            print("Invalid URL")
+            return
+        }
+        
+        do {
+            let (data, _) = try await URLSession.shared.data(from: url)
+            
+            let decoder = JSONDecoder()
+            decoder.keyDecodingStrategy = .convertFromSnakeCase
+            
+            if let decodedResponse = try? decoder.decode(HomeModel.self, from: data) {
+                hotSales = decodedResponse.homeStore
+                bestSeller = decodedResponse.bestSeller
+                print(hotSales.first!.title)
+            }
+        } catch {
+            print("Invalid data")
+        }
+    }
+    
+//    func loadImage(url: String) async -> Image {
+//        guard let url = URL(string: url)
+//        else {
+//            print("Invalid URL")
+//            return
+//        }
+//        
+//        do {
+//            let (data, _) = try await URLSession.shared.data(from: url)
+//            
+//            let decoder = JSONDecoder()
+//            decoder.keyDecodingStrategy = .convertFromSnakeCase
+//            
+//            if let decodedResponse = try? decoder.decode(HomeModel.self, from: data) {
+//                hotSales = decodedResponse.homeStore
+//                bestSeller = decodedResponse.bestSeller
+//                print(hotSales.first!.title)
+//            }
+//        } catch {
+//            print("Invalid data")
+//        }
+//        
+//    }
 }

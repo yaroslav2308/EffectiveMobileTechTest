@@ -7,6 +7,34 @@
 
 import Foundation
 
+// Product Model
+
+// MARK: - HomeModel
+struct HomeModel: Codable {
+    let homeStore: [HomeStore]
+    let bestSeller: [BestSeller]
+}
+
+// MARK: - BestSeller
+struct BestSeller: Codable, Hashable {
+    let id: Int
+    let isFavorites: Bool
+    let title: String
+    let priceWithoutDiscount: Int
+    let discountPrice: Int
+    let picture: String
+}
+
+// MARK: - HomeStore
+struct HomeStore: Codable, Hashable {
+    let id: Int
+    let isNew: Bool?
+    let title: String
+    let subtitle: String
+    let picture: String
+    let isBuy: Bool
+}
+
 
 
 // ProductTypes
