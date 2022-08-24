@@ -81,7 +81,6 @@
 		1211C8EE28B655BD006B0801 = {
 			isa = PBXGroup;
 			children = (
-				1211C92428B658CC006B0801 /* Fonts */,
 				1211C8F928B655BD006B0801 /* EffectiveMobileTechTest */,
 				1211C90A28B655BF006B0801 /* EffectiveMobileTechTestTests */,
 				1211C91428B655BF006B0801 /* EffectiveMobileTechTestUITests */,
@@ -102,6 +101,7 @@
 		1211C8F928B655BD006B0801 /* EffectiveMobileTechTest */ = {
 			isa = PBXGroup;
 			children = (
+				1211C92428B658CC006B0801 /* Fonts */,
 				1211C92B28B6599E006B0801 /* Info.plist */,
 				1211C8FA28B655BD006B0801 /* EffectiveMobileTechTestApp.swift */,
 				1211C8FC28B655BD006B0801 /* ContentView.swift */,
