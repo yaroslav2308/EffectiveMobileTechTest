@@ -14,7 +14,7 @@ struct CustomTabBarView: View {
     var body: some View {
         ZStack(alignment: .bottom) {
             ZStack {
-                Color.blue
+                HomeView()
                     .opacity(selection == .explorer ? 1 : 0)
                 Color.purple
                     .opacity(selection == .cart ? 1 : 0)
@@ -23,7 +23,7 @@ struct CustomTabBarView: View {
                 Color.red
                     .opacity(selection == .favorites ? 1 : 0)
             }
-            .ignoresSafeArea()
+            .ignoresSafeArea(edges: .bottom)
             HStack {
                 ForEach(TabBarItem.allCases, id: \.self) { tab in
                     Spacer()
