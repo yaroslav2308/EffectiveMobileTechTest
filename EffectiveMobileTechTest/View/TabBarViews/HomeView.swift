@@ -11,7 +11,6 @@ struct HomeView: View {
     @StateObject var homeViewModel: HomeViewModel = HomeViewModel()
     @State private var hotSales: [HomeStore] = [HomeStore]()
     @State private var bestSeller: [BestSeller] = [BestSeller]()
-    @State private var index = 0
     var body: some View {
         VStack(spacing: 0) {
             HStack {
@@ -71,7 +70,9 @@ struct HomeView: View {
                             ForEach(ProductType.allCases, id: \.self) { type in
                                 productTypeView(type: type)
                                     .onTapGesture {
+                                        print(index)
                                         switchProuductType(type: type)
+                                        print(index)
                                     }
                             }
                         }
@@ -136,16 +137,13 @@ struct HomeView: View {
                     .padding(.horizontal, 25)
                     
                     VStack {
-                        TabView(selection: $index) {
+                        TabView {
                             ForEach(hotSales, id: \.self) { item in
                                 hotSalesView(hotSalesData: item)
                             }
                         }
                         .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
                         .shadow(color: Color.black.opacity(0.14), radius: 10)
-                        .task {
-                            await loadData()
-                        }
                     }
                     .frame(height: 200)
                     
@@ -209,16 +207,6 @@ extension HomeView {
     }
 }
 
-struct CardView: View{
-    var body: some View{
-        RoundedRectangle(cornerRadius: 12)
-            .fill(Color.pink)
-            .frame(height: 182)
-            .padding()
-            .padding(.horizontal, 6)
-    }
-}
-
 extension HomeView {
     @ViewBuilder
     private func hotSalesView(hotSalesData: HomeStore) -> some View {
@@ -239,8 +227,10 @@ extension HomeView {
                 VStack(alignment: .leading) {
                     Text(hotSalesData.title)
                         .font(.custom(customMarkProFontRegular, size: 25).bold())
+                        .foregroundColor(Color.white)
                     Text(hotSalesData.subtitle)
                         .font(.custom(customMarkProFontRegular, size: 11))
+                        .foregroundColor(Color.white)
                 }
                 Spacer()
                 Text("Buy now!")
@@ -258,9 +248,14 @@ extension HomeView {
         .padding()
         .padding(.horizontal, 6)
         .background(
-            RoundedRectangle(cornerRadius: 12)
-                .fill(Color.pink)
-                .frame(height: 182)
+            RemoteImageView(url: hotSalesData.picture, placeholder: {
+                Image(systemName: "person")
+            }, image: {
+                $0
+                    .resizable()
+                    .frame(height: 182)
+                    .clipShape(RoundedRectangle(cornerRadius: 12))
+            })
         )
         .padding()
         
@@ -272,51 +267,3 @@ extension HomeView {
 
 
 // MARK: - Network Stuff
-extension HomeView {
-    func loadData() async {
-        guard let url = URL(string: "https://run.mocky.io/v3/654bd15e-b121-49ba-a588-960956b15175")
-        else {
-            print("Invalid URL")
-            return
-        }
-        
-        do {
-            let (data, _) = try await URLSession.shared.data(from: url)
-            
-            let decoder = JSONDecoder()
-            decoder.keyDecodingStrategy = .convertFromSnakeCase
-            
-            if let decodedResponse = try? decoder.decode(HomeModel.self, from: data) {
-                hotSales = decodedResponse.homeStore
-                bestSeller = decodedResponse.bestSeller
-                print(hotSales.first!.title)
-            }
-        } catch {
-            print("Invalid data")
-        }
-    }
-    
-//    func loadImage(url: String) async -> Image {
-//        guard let url = URL(string: url)
-//        else {
-//            print("Invalid URL")
-//            return
-//        }
-//        
-//        do {
-//            let (data, _) = try await URLSession.shared.data(from: url)
-//            
-//            let decoder = JSONDecoder()
-//            decoder.keyDecodingStrategy = .convertFromSnakeCase
-//            
-//            if let decodedResponse = try? decoder.decode(HomeModel.self, from: data) {
-//                hotSales = decodedResponse.homeStore
-//                bestSeller = decodedResponse.bestSeller
-//                print(hotSales.first!.title)
-//            }
-//        } catch {
-//            print("Invalid data")
-//        }
-//        
-//    }
-}

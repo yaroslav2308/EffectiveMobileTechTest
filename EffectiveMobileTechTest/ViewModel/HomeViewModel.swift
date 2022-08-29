@@ -9,4 +9,5 @@ import Foundation
 
 class HomeViewModel: ObservableObject {
     @Published var productType: ProductType = .phone
+    @Published var productCarousel: Int = 0
 }
