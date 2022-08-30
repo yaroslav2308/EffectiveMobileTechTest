@@ -9,8 +9,6 @@ import SwiftUI
 
 struct HomeView: View {
     @StateObject var homeViewModel: HomeViewModel = HomeViewModel()
-    @State private var hotSales: [HomeStore] = [HomeStore]()
-    @State private var bestSeller: [BestSeller] = [BestSeller]()
     var body: some View {
         VStack(spacing: 0) {
             HStack {
@@ -70,9 +68,7 @@ struct HomeView: View {
                             ForEach(ProductType.allCases, id: \.self) { type in
                                 productTypeView(type: type)
                                     .onTapGesture {
-                                        print(index)
                                         switchProuductType(type: type)
-                                        print(index)
                                     }
                             }
                         }
@@ -138,7 +134,7 @@ struct HomeView: View {
                     
                     VStack {
                         TabView {
-                            ForEach(hotSales, id: \.self) { item in
+                            ForEach(homeViewModel.hotSales, id: \.self) { item in
                                 hotSalesView(hotSalesData: item)
                             }
                         }
@@ -164,9 +160,10 @@ struct HomeView: View {
                 }
             }
         }
+        .onAppear {
+            homeViewModel.fetchData()
+        }
     }
-    
-    
 }
 
 struct HomeView_Previews: PreviewProvider {
