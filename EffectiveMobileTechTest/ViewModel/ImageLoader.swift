@@ -5,26 +5,36 @@
 //  Created by Yaroslav Monastyrev on 27.08.2022.
 //
 
-import UIKit
+
 import SwiftUI
+import Combine
+import Foundation
 
+class ImageLoader: ObservableObject {
+    @Published var image: UIImage?
+    private let url: String
+    private var cancellable: AnyCancellable?
 
-class ImageLoaderService: ObservableObject {
-    @Published var image = UIImage()
-
-    convenience init(url: String) {
-        self.init()
-        loadImage(for: url)
+    init(url: String) {
+        self.url = url
     }
 
-    func loadImage(for url: String) {
+    deinit {
+        cancel()
+    }
+    
+    func load() {
         guard let safeUrl = URL(string: url) else { return }
-        let task = URLSession.shared.dataTask(with: safeUrl) { data, _, _ in
-            guard let data = data else { return }
-            DispatchQueue.main.async {
-                self.image = UIImage(data: data) ?? UIImage()
-            }
-        }
-        task.resume()
+        cancellable = URLSession.shared.dataTaskPublisher(for: safeUrl)
+                    .map { UIImage(data: $0.data) }
+                    .replaceError(with: nil)
+                    .receive(on: DispatchQueue.main)
+                    .sink { [weak self] in self?.image = $0 }
+    }
+
+    func cancel() {
+        cancellable?.cancel()
     }
 }
+
+

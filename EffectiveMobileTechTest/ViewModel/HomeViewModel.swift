@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 class HomeViewModel: ObservableObject {
     @Published var productType: ProductType = .phone
@@ -13,6 +14,8 @@ class HomeViewModel: ObservableObject {
     
     @Published var hotSales: [HomeStore] = [HomeStore]()
     @Published var bestSeller: [BestSeller] = [BestSeller]()
+    
+    @Published var image: UIImage = UIImage()
     
     // get request from https://run.mocky.io/v3/654bd15e-b121-49ba-a588-960956b15175
     func fetchData() {
@@ -57,5 +60,16 @@ class HomeViewModel: ObservableObject {
             print("Parsing JSON error: \(error)")
             return nil
         }
+    }
+    
+    func loadImage(for url: String) {
+        guard let safeUrl = URL(string: url) else { return }
+        let task = URLSession.shared.dataTask(with: safeUrl) { data, _, _ in
+            guard let data = data else { return }
+            DispatchQueue.main.async {
+                self.image = UIImage(data: data) ?? UIImage()
+            }
+        }
+        task.resume()
     }
 }

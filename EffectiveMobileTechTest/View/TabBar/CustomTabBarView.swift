@@ -14,16 +14,42 @@ struct CustomTabBarView: View {
     var body: some View {
         ZStack(alignment: .bottom) {
             ZStack {
+                
+                ScrollView {
+                            VStack {
+                                Text("abc").frame(width: 200, height: 50)
+                                Text("def").frame(width: 200, height: 50)
+                                Text("def").frame(width: 200, height: 50)
+                                Text("def").frame(width: 200, height: 50)
+                            }
+                            .border(Color.yellow, width: 3)
+                            .background(Color.blue)
+                        }.padding(10).border(Color.red, width: 3)
+                    .opacity(selection == .cart ? 1 : 0)
+                ScrollView {
+                            VStack {
+                                Text("abc").frame(width: 200, height: 50)
+                                Text("def").frame(width: 200, height: 50)
+                                Text("def").frame(width: 200, height: 50)
+                            }
+                            .border(Color.yellow, width: 3)
+                            .background(Color.blue)
+                        }.padding(10).border(Color.red, width: 3)
+                    .opacity(selection == .profile ? 1 : 0)
+                ScrollView {
+                            VStack {
+                                Text("abc").frame(width: 200, height: 50)
+                                Text("def").frame(width: 200, height: 50)
+                            }
+                            .border(Color.yellow, width: 3)
+                            .background(Color.blue)
+                        }.padding(10).border(Color.red, width: 3)
+                .opacity(selection == .favorites ? 1 : 0)
                 HomeView()
                     .opacity(selection == .explorer ? 1 : 0)
-                Color.purple
-                    .opacity(selection == .cart ? 1 : 0)
-                Color.white
-                    .opacity(selection == .profile ? 1 : 0)
-                Color.red
-                    .opacity(selection == .favorites ? 1 : 0)
             }
-            .ignoresSafeArea(edges: .bottom)
+//            .ignoresSafeArea(edges: .bottom)
+            
             HStack {
                 ForEach(TabBarItem.allCases, id: \.self) { tab in
                     Spacer()

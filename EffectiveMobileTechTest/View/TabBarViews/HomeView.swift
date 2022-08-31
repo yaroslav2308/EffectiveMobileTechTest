@@ -9,6 +9,10 @@ import SwiftUI
 
 struct HomeView: View {
     @StateObject var homeViewModel: HomeViewModel = HomeViewModel()
+    let columns = [
+        GridItem(.flexible()),
+        GridItem(.flexible())
+    ]
     var body: some View {
         VStack(spacing: 0) {
             HStack {
@@ -157,6 +161,14 @@ struct HomeView: View {
                     }
                     .padding(.top, 10)
                     .padding(.horizontal, 25)
+                    
+                    LazyVGrid(columns: columns, spacing: 20) {
+                        ForEach(homeViewModel.bestSeller, id: \.self) { bestSeller in
+                            productCardView(bestSeller: bestSeller)
+                        }
+                    }
+                    .padding(.horizontal, 13)
+                    .padding(.vertical)
                 }
             }
         }
@@ -172,6 +184,8 @@ struct HomeView_Previews: PreviewProvider {
     }
 }
 
+
+// MARK: Product typeView
 extension HomeView {
     @ViewBuilder
     private func productTypeView(type: ProductType) -> some View {
@@ -204,6 +218,7 @@ extension HomeView {
     }
 }
 
+// MARK: Hot sales tabView
 extension HomeView {
     @ViewBuilder
     private func hotSalesView(hotSalesData: HomeStore) -> some View {
@@ -245,22 +260,77 @@ extension HomeView {
         .padding()
         .padding(.horizontal, 6)
         .background(
-            RemoteImageView(url: hotSalesData.picture, placeholder: {
-                Image(systemName: "person")
-            }, image: {
-                $0
-                    .resizable()
-                    .frame(height: 182)
-                    .clipShape(RoundedRectangle(cornerRadius: 12))
-            })
+            AsyncImage(url: hotSalesData.picture)
+                .frame(height: 182)
+                .clipShape(RoundedRectangle(cornerRadius: 12))
         )
         .padding()
-        
-        
-        
     }
 }
 
 
+// MARK: Best seller cardView
+extension HomeView {
+    @ViewBuilder
+    private func productCardView(bestSeller: BestSeller) -> some View {
+        VStack(spacing: 0) {
+            ZStack {
+                AsyncImage(url: bestSeller.picture)
+                    .aspectRatio(contentMode: .fill)
+                    .frame(width: UIScreen.main.bounds.width / 2.3, height: UIScreen.main.bounds.height / 4, alignment: .center)
+                    .clipped()
+                VStack {
+                    HStack() {
+                        Spacer()
+                        ZStack {
+                            
+                            Image(systemName: bestSeller.isFavorites ? "heart.fill" : "heart")
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(height: 11)
+                                .foregroundColor(Color.customOrange)
+                                .background(
+                                    Circle()
+                                        .fill(.white)
+                                        .frame(width: 25, height: 25)
+                                        .shadow(color: .black.opacity(0.1), radius: 10)
+                                )
+                        }
+                    }
+                    .frame(maxWidth: .infinity)
+                    Spacer()
+                }
+                .frame(maxHeight: .infinity)
+                .padding()
+                
+            }
+            
+            HStack(alignment: .bottom) {
+                Text("$" + "\(bestSeller.priceWithoutDiscount)")
+                    .font(.custom(customMarkProFontRegular, size: 16)).bold()
+                Text("$" + "\(bestSeller.discountPrice)")
+                    .font(.custom(customMarkProFontRegular, size: 10))
+                    .foregroundColor(Color.black.opacity(0.3))
+                Spacer()
+            }
+            .padding(.horizontal, 16)
+            
+            HStack {
+                Text(bestSeller.title)
+                    .font(.custom(customMarkProFontRegular, size: 10))
+                Spacer()
+                
+            }
+            .padding(.horizontal, 16)
+            .padding(.bottom)
+            
 
-// MARK: - Network Stuff
+        }
+        .frame(width: UIScreen.main.bounds.width / 2.3, height: UIScreen.main.bounds.height / 3)
+        .background(
+            RoundedRectangle(cornerRadius: 12)
+                .fill(.white)
+                .shadow(color: Color.black.opacity(0.1), radius: 12)
+        )
+    }
+}
