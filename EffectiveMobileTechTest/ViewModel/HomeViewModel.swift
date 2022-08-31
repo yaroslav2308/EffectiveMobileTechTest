@@ -61,15 +61,4 @@ class HomeViewModel: ObservableObject {
             return nil
         }
     }
-    
-    func loadImage(for url: String) {
-        guard let safeUrl = URL(string: url) else { return }
-        let task = URLSession.shared.dataTask(with: safeUrl) { data, _, _ in
-            guard let data = data else { return }
-            DispatchQueue.main.async {
-                self.image = UIImage(data: data) ?? UIImage()
-            }
-        }
-        task.resume()
-    }
 }
