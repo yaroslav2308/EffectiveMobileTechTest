@@ -10,6 +10,7 @@ import SwiftUI
 struct CustomTabBarView: View {
     @State private var selection: TabBarItem = .explorer
     @State private var cartPresentation: Bool = false
+    @State private var filterPresentation: Bool = false
     
     var body: some View {
         ZStack(alignment: .bottom) {
@@ -45,7 +46,7 @@ struct CustomTabBarView: View {
                             .background(Color.blue)
                         }.padding(10).border(Color.red, width: 3)
                 .opacity(selection == .favorites ? 1 : 0)
-                HomeView()
+                HomeView(filterPresentation: $filterPresentation)
                     .opacity(selection == .explorer ? 1 : 0)
             }
 //            .ignoresSafeArea(edges: .bottom)
@@ -65,6 +66,46 @@ struct CustomTabBarView: View {
             .background(Color.customDarkBlue)
             .cornerRadius(30)
             .padding(.horizontal, 12)
+            .padding(.vertical, 10)
+            
+            FlexibleSheet(isPresent: $filterPresentation) {
+                VStack {
+                    HStack {
+                        Button {
+                            filterPresentation.toggle()
+                        } label: {
+                            Image(systemName: "clear.fill")
+                                .resizable()
+                                .frame(width: 37, height: 37)
+                                .foregroundColor(Color.customDarkBlue)
+                        }
+                        Spacer()
+                        Text("Filter options")
+                            .font(.custom(customMarkProFontRegular, size: 18))
+                            .padding(.leading, 25)
+                        Spacer()
+                        Button {
+                            filterPresentation.toggle()
+                        } label: {
+                            Text("Done")
+                                .font(.custom(customMarkProFontRegular, size: 18))
+                                .foregroundColor(Color.white)
+                                .padding(.horizontal, 21)
+                                .padding(.vertical, 7)
+                                .background(Color.customOrange)
+                                .cornerRadius(10)
+                        }
+                    }
+                    Spacer()
+                    
+                }
+                .padding(.horizontal, 44)
+                .padding(.vertical, 30)
+//                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .background(Color.white)
+                .clipShape(RoundedRectangle(cornerRadius: 25, style: .continuous))
+                .shadow(color: .black.opacity(0.1), radius: 12)
+            }
         }
     }
 }

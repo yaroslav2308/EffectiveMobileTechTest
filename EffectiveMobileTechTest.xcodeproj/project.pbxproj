@@ -28,6 +28,7 @@
 		1216627728B678FA007A79EB /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1216627628B678FA007A79EB /* HomeViewModel.swift */; };
 		128640B728BA776E00394862 /* ImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 128640B628BA776E00394862 /* ImageLoader.swift */; };
 		128640B928BA78BC00394862 /* AsyncImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 128640B828BA78BC00394862 /* AsyncImage.swift */; };
+		12C07FAD28C0E6730058F45A /* FlexibleSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12C07FAC28C0E6720058F45A /* FlexibleSheet.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -73,6 +74,7 @@
 		1216627628B678FA007A79EB /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
 		128640B628BA776E00394862 /* ImageLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageLoader.swift; sourceTree = "<group>"; };
 		128640B828BA78BC00394862 /* AsyncImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncImage.swift; sourceTree = "<group>"; };
+		12C07FAC28C0E6720058F45A /* FlexibleSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlexibleSheet.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -214,6 +216,7 @@
 				1211C93C28B66EF5006B0801 /* CartView.swift */,
 				1211C93E28B66F06006B0801 /* DetailProductView.swift */,
 				128640B828BA78BC00394862 /* AsyncImage.swift */,
+				12C07FAC28C0E6720058F45A /* FlexibleSheet.swift */,
 			);
 			path = TabBarViews;
 			sourceTree = "<group>";
@@ -361,6 +364,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1211C93028B65B3B006B0801 /* CustomTabBarView.swift in Sources */,
+				12C07FAD28C0E6730058F45A /* FlexibleSheet.swift in Sources */,
 				1211C93B28B66EE9006B0801 /* HomeView.swift in Sources */,
 				128640B728BA776E00394862 /* ImageLoader.swift in Sources */,
 				1211C93528B65C55006B0801 /* Colors.swift in Sources */,

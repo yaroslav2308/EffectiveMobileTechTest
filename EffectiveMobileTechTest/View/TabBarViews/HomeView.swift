@@ -9,179 +9,226 @@ import SwiftUI
 
 struct HomeView: View {
     @StateObject var homeViewModel: HomeViewModel = HomeViewModel()
+    @State private var isPresent: Bool = false
+    @Binding var filterPresentation: Bool
     let columns = [
         GridItem(.flexible()),
         GridItem(.flexible())
     ]
     var body: some View {
-        VStack(spacing: 0) {
-            Spacer()
-            HStack {
-                ZStack {
-                    Button {
+        ZStack {
+            VStack(spacing: 0) {
+                HStack {
+                    ZStack {
+                        Button {
+                            
+                        } label: {
+                            HStack {
+                                Image("metka")
+                                Text("Zihuatanejo, Gro")
+                                    .font(.custom(customMarkProFontRegular, size: 20))
+                                    .foregroundColor(Color.black)
+                                Image("arrow")
+                            }
+                        }
+                        .frame(alignment: .center)
                         
-                    } label: {
-                        HStack {
-                            Image("metka")
-                            Text("Zihuatanejo, Gro")
-                                .font(.custom(customMarkProFontRegular, size: 20))
-                                .foregroundColor(Color.black)
-                            Image("arrow")
+                        VStack(alignment: .trailing) {
+                            Button {
+                                filterPresentation.toggle()
+                            } label: {
+                                Image("filter")
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
+                                    .frame(width: 15)
+                            }
                         }
+                        .frame(maxWidth: .infinity, alignment: .trailing)
                     }
-                    .frame(alignment: .center)
                     
-                    VStack(alignment: .trailing) {
-                        Button {
-                            
-                        } label: {
-                            Image("filter")
-                                .resizable()
-                                .aspectRatio(contentMode: .fit)
-                                .frame(width: 15)
-                        }
-                    }
-                    .frame(maxWidth: .infinity, alignment: .trailing)
+                    
+                    
                 }
+                .padding(.vertical)
+                .padding(.horizontal, 25)
+                .background(Color.white)
                 
-                
-                
-            }
-            .padding(.vertical)
-            .padding(.horizontal, 25)
-            .background(Color.white)
-            
-            ScrollView(.vertical, showsIndicators: true) {
-                VStack(spacing: 0) {
-                    HStack {
-                        Text("Select Category")
-                            .font(.custom(customMarkProFontRegular, size: 25).bold())
-                        Spacer()
-                        Button {
-                            
-                        } label: {
-                            Text("view all")
-                                .font(.custom(customMarkProFontRegular, size: 15))
-                                .foregroundColor(Color.customOrange)
-                        }
-                    }
-                    .padding(.vertical)
-                    .padding(.horizontal, 25)
-                    
-                    ScrollView(.horizontal, showsIndicators: false) {
-                        HStack(spacing: 23) {
-                            ForEach(ProductType.allCases, id: \.self) { type in
-                                productTypeView(type: type)
-                                    .onTapGesture {
-                                        switchProuductType(type: type)
-                                    }
+                ScrollView(.vertical, showsIndicators: true) {
+                    VStack(spacing: 0) {
+                        HStack {
+                            Text("Select Category")
+                                .font(.custom(customMarkProFontRegular, size: 25).bold())
+                            Spacer()
+                            Button {
+                                
+                            } label: {
+                                Text("view all")
+                                    .font(.custom(customMarkProFontRegular, size: 15))
+                                    .foregroundColor(Color.customOrange)
                             }
                         }
                         .padding(.vertical)
                         .padding(.horizontal, 25)
-                    }
-                    HStack {
-                        HStack(spacing: 20) {
-                            Button {
-                                
-                            } label: {
-                                Image(systemName: "magnifyingglass")
-                                    .font(.title2)
-                                    .foregroundColor(Color.customOrange)
-                            }
-                            TextField("Search", text: .constant(""))
-                        }
-                        .padding(.vertical, 10)
-                        .padding(.horizontal)
-                        .background(
-                            Capsule()
-                                .fill(.white)
-                                .shadow(color: .black.opacity(0.1), radius: 7)
-                                .frame(maxWidth: .infinity)
-                        )
                         
-                        ZStack {
-                            Button {
-                                
-                            } label: {
-                                ZStack {
-                                    Circle()
-                                        .fill(Color.customOrange)
-                                    Image("qrCode")
-                                        .resizable()
-                                        .renderingMode(.template)
-                                        .aspectRatio(contentMode: .fit)
-                                        .frame(height: 20)
-                                        .foregroundColor(Color.white)
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack(spacing: 23) {
+                                ForEach(ProductType.allCases, id: \.self) { type in
+                                    productTypeView(type: type)
+                                        .onTapGesture {
+                                            switchProuductType(type: type)
+                                        }
                                 }
                             }
+                            .padding(.vertical)
+                            .padding(.horizontal, 25)
                         }
-                        .frame(maxWidth: 50)
-                        
-                    }
-                    .padding(.vertical)
-                    .padding(.horizontal, 25)
-                    
-                    HStack {
-                        Text("Hot sales")
-                            .font(.custom(customMarkProFontRegular, size: 25).bold())
-                        Spacer()
-                        Button {
+                        HStack {
+                            HStack(spacing: 20) {
+                                Button {
+                                    
+                                } label: {
+                                    Image(systemName: "magnifyingglass")
+                                        .font(.title2)
+                                        .foregroundColor(Color.customOrange)
+                                }
+                                TextField("Search", text: .constant(""))
+                            }
+                            .padding(.vertical, 10)
+                            .padding(.horizontal)
+                            .background(
+                                Capsule()
+                                    .fill(.white)
+                                    .shadow(color: .black.opacity(0.1), radius: 7)
+                                    .frame(maxWidth: .infinity)
+                            )
                             
-                        } label: {
-                            Text("see more")
-                                .font(.custom(customMarkProFontRegular, size: 15))
-                                .foregroundColor(Color.customOrange)
+                            ZStack {
+                                Button {
+                                    
+                                } label: {
+                                    ZStack {
+                                        Circle()
+                                            .fill(Color.customOrange)
+                                        Image("qrCode")
+                                            .resizable()
+                                            .renderingMode(.template)
+                                            .aspectRatio(contentMode: .fit)
+                                            .frame(height: 20)
+                                            .foregroundColor(Color.white)
+                                    }
+                                }
+                            }
+                            .frame(maxWidth: 50)
+                            
                         }
-                    }
-                    .padding(.top, 10)
-                    .padding(.horizontal, 25)
-                    
-                    VStack {
-                        TabView {
-                            ForEach(homeViewModel.hotSales, id: \.self) { item in
-                                hotSalesView(hotSalesData: item)
+                        .padding(.vertical)
+                        .padding(.horizontal, 25)
+                        
+                        HStack {
+                            Text("Hot sales")
+                                .font(.custom(customMarkProFontRegular, size: 25).bold())
+                            Spacer()
+                            Button {
+                                
+                            } label: {
+                                Text("see more")
+                                    .font(.custom(customMarkProFontRegular, size: 15))
+                                    .foregroundColor(Color.customOrange)
                             }
                         }
-                        .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
-                        .shadow(color: Color.black.opacity(0.14), radius: 10)
+                        .padding(.top, 10)
+                        .padding(.horizontal, 25)
+                        
+                        VStack {
+                            TabView {
+                                ForEach(homeViewModel.hotSales, id: \.self) { item in
+                                    hotSalesView(hotSalesData: item)
+                                }
+                            }
+                            .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
+                            .shadow(color: Color.black.opacity(0.14), radius: 10)
+                        }
+                        .frame(height: 200)
+                        
+                        HStack {
+                            Text("Best seller")
+                                .font(.custom(customMarkProFontRegular, size: 25).bold())
+                            Spacer()
+                            Button {
+                                
+                            } label: {
+                                Text("see more")
+                                    .font(.custom(customMarkProFontRegular, size: 15))
+                                    .foregroundColor(Color.customOrange)
+                            }
+                        }
+                        .padding(.top, 10)
+                        .padding(.horizontal, 25)
+                        
+                        LazyVGrid(columns: columns, spacing: 20) {
+                            ForEach(homeViewModel.bestSeller, id: \.self) { bestSeller in
+                                productCardView(bestSeller: bestSeller)
+                            }
+                        }
+                        .padding(.horizontal, 13)
+                        .padding(.vertical)
                     }
-                    .frame(height: 200)
-                    
+                }
+                
+                
+            }
+            .onAppear {
+                homeViewModel.fetchData()
+            }
+            
+            FlexibleSheet(isPresent: $isPresent) {
+                VStack {
                     HStack {
-                        Text("Best seller")
-                            .font(.custom(customMarkProFontRegular, size: 25).bold())
+                        Button {
+                            isPresent.toggle()
+                        } label: {
+                            Image(systemName: "clear.fill")
+                                .resizable()
+                                .frame(width: 37, height: 37)
+                                .foregroundColor(Color.customDarkBlue)
+                        }
+                        Spacer()
+                        Text("Filter options")
+                            .font(.custom(customMarkProFontRegular, size: 18))
+                            .padding(.leading, 25)
                         Spacer()
                         Button {
-                            
+                            isPresent.toggle()
                         } label: {
-                            Text("see more")
-                                .font(.custom(customMarkProFontRegular, size: 15))
-                                .foregroundColor(Color.customOrange)
+                            Text("Done")
+                                .font(.custom(customMarkProFontRegular, size: 18))
+                                .foregroundColor(Color.white)
+                                .padding(.horizontal, 21)
+                                .padding(.vertical, 7)
+                                .background(Color.customOrange)
+                                .cornerRadius(10)
                         }
                     }
-                    .padding(.top, 10)
-                    .padding(.horizontal, 25)
+                    Spacer()
                     
-                    LazyVGrid(columns: columns, spacing: 20) {
-                        ForEach(homeViewModel.bestSeller, id: \.self) { bestSeller in
-                            productCardView(bestSeller: bestSeller)
-                        }
-                    }
-                    .padding(.horizontal, 13)
-                    .padding(.vertical)
                 }
+                .padding(.horizontal, 44)
+                .padding(.vertical, 30)
+//                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .background(Color.white)
+                .clipShape(RoundedRectangle(cornerRadius: 25, style: .continuous))
+                .shadow(color: .black.opacity(0.1), radius: 12)
             }
+            
+            
         }
-        .onAppear {
-            homeViewModel.fetchData()
-        }
+        
     }
 }
 
 struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
-        HomeView()
+        HomeView(filterPresentation: .constant(false))
     }
 }
 
